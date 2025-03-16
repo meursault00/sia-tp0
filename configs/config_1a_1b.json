@@ -1,0 +1,8 @@
+{
+    "analysis": {
+        "pokemon": ["jolteon", "caterpie", "snorlax", "onix", "mewtwo"],
+        "pokeballs": ["pokeball", "ultraball", "fastball", "heavyball"],
+        "num_experiments": 100,
+        "noise": 0.0
+    }
+}
