@@ -3,18 +3,23 @@ import sys
 
 from src.catching import attempt_catch
 from src.pokemon import PokemonFactory, StatusEffect
+from analysis_2a import analyze_status_effects
+from analysis_2b import analyze_hp_effects
 
 if __name__ == "__main__":
     factory = PokemonFactory("pokemon.json")
     with open(f"{sys.argv[1]}", "r") as f:
         config = json.load(f)
-        ball = config["pokeball"]
-        pokemon = factory.create(config["pokemon"], 100, StatusEffect.NONE, 1)
+        ball_2a = config["pokeball"]
+        pokemon_names_2a = config["pokemon"]
+    
+    with open(f"{sys.argv[2]}", "r") as f:
+        config = json.load(f)
+        ball_2b = config["pokeball"]
+        pokemon_names_2b = config["pokemon"]
 
-        # for i in range(100, 1, -1):
-        #     pokemon = factory.create(config["pokemon"], 100, StatusEffect.NONE, i / 100)
-        #     print(pokemon.current_hp)
+        #Exercise 2a
+        analyze_status_effects(pokemon_names_2a, ball_2a)
 
-        print("No noise: ", attempt_catch(pokemon, ball))
-        for _ in range(10):
-            print("Noisy: ", attempt_catch(pokemon, ball, 0.15))
+        #Exercise 2b
+        analyze_hp_effects(pokemon_names_2b, ball_2b)
