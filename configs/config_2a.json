@@ -1,5 +1,7 @@
 {
     "pokemon": ["caterpie", "mewtwo", "snorlax", "onix", "jolteon"],
-    "pokeball": "pokeball"
+    "pokeball": "pokeball",
+    "num_trials": 500,
+    "noise": 0.15
 }
   

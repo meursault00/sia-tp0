@@ -1,12 +1,21 @@
 import numpy as np
 import plotly.graph_objects as go
 import csv
+import json
+import sys
 
 from src.catching import attempt_catch
 from src.pokemon import PokemonFactory, StatusEffect
 
-def analyze_status_effects(pokemon_list, ball, num_trials=500, noise=0.15):
+def analyze_status_effects(config_path="configs/config_2a.json"):
     factory = PokemonFactory("pokemon.json")
+    
+    with open(f"{sys.argv[1]}", "r") as f:
+        config = json.load(f)
+        ball = config["pokeball"]
+        pokemon_list = config["pokemon"]
+        num_trials = config["num_trials"]
+        noise = config["noise"]
 
     #statuses we will test
     status_effects = [
@@ -83,3 +92,7 @@ def analyze_status_effects(pokemon_list, ball, num_trials=500, noise=0.15):
 
     #show graph
     fig.show()
+
+if __name__ == "__main__":
+    config_path = sys.argv[1] if len(sys.argv) > 1 else "configs/config_2a.json"
+    analyze_status_effects(config_path)
