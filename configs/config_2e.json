@@ -1,6 +1,6 @@
 {
     "analysis": {
-      "pokemon": ["mewtwo", "caterpie"],
+      "pokemon": ["caterpie"],
       "pokeballs": ["pokeball", "ultraball", "fastball", "heavyball"],
       "statuses": ["NONE", "POISON", "BURN", "PARALYSIS", "SLEEP", "FREEZE"],
       "hp_percentages": [0.25, 0.5, 0.75, 1.0],
