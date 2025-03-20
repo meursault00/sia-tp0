@@ -34,7 +34,6 @@ def run_analysis_2d(config_path="configs/config_2d.json"):
             for hp_perc in hp_percentages:
                 for lvl in levels:
                     for ball in pokeballs:
-                        success_count = 0
                         for _ in range(num_experiments):
                             poke = factory.create(
                                 pkmn_name,
@@ -42,30 +41,27 @@ def run_analysis_2d(config_path="configs/config_2d.json"):
                                 status_effect,
                                 hp_perc
                             )
-                            attempt_success, _ = attempt_catch(poke, ball, noise)
-                            if attempt_success:
-                                success_count += 1
-                        success_rate = success_count / num_experiments
+                            _, capture_rate = attempt_catch(poke, ball, noise)
                         results.append({
                             "pokemon": pkmn_name,
                             "status": status_str,
                             "hp_perc": hp_perc,
                             "level": lvl,
                             "pokeball": ball,
-                            "success_rate": success_rate
+                            "capture_rate": capture_rate
                         })
 
     # Pasar resultados a DataFrame
     df = pd.DataFrame(results)
-    print("Resultados totales (primeras 100 filas):")
+    print("Resultados totales (primeras 1000 filas):")
     print(df.head(100))
 
     # Imprimir la combinación óptima para cada pokemon en cada nivel
     print("\nMejores combinaciones para cada Pokémon:")
     for pkmn in df["pokemon"].unique():
         df_pkmn = df[df["pokemon"] == pkmn]
-        max_rate = df_pkmn["success_rate"].max()
-        best_combinations = df_pkmn[df_pkmn["success_rate"] == max_rate]
+        max_rate = df_pkmn["capture_rate"].max()
+        best_combinations = df_pkmn[df_pkmn["capture_rate"] == max_rate]
         print(f"\n{pkmn.capitalize()} - Mejor tasa de captura: {max_rate:.4f}")
         print(best_combinations.to_string(index=False))
 
@@ -80,11 +76,11 @@ def run_analysis_2d(config_path="configs/config_2d.json"):
         fig_hp = px.bar(
             df_hp,
             x="hp_perc",
-            y="success_rate",
+            y="capture_rate",
             color="pokeball",
             barmode="group",
-            title=f"{pkmn.capitalize()}: Capture Success vs. HP Percentage\n(Level fixed at {fixed_level}, Status fixed at {fixed_status.name})",
-            labels={"hp_perc": "HP Percentage", "success_rate": "Success Rate"}
+            title=f"{pkmn.capitalize()}: Capture Rate vs. HP Percentage\n(Level fixed at {fixed_level}, Status fixed at {fixed_status.name})",
+            labels={"hp_perc": "HP Percentage", "capture_rate": "Capture Rate"}
         )
         fig_hp.show()
 
@@ -95,11 +91,11 @@ def run_analysis_2d(config_path="configs/config_2d.json"):
         fig_level = px.line(
             df_level,
             x="level",
-            y="success_rate",
+            y="capture_rate",
             color="pokeball",
             markers=True,
-            title=f"{pkmn.capitalize()}: Capture Success vs. Level\n(HP fixed at {fixed_hp*100:.0f}%, Status fixed at {fixed_status.name})",
-            labels={"level": "Level", "success_rate": "Success Rate"}
+            title=f"{pkmn.capitalize()}: Capture Rate vs. Level\n(HP fixed at {fixed_hp*100:.0f}%, Status fixed at {fixed_status.name})",
+            labels={"level": "Level", "capture_rate": "Capture Rate"}
         )
         fig_level.show()
 
@@ -110,11 +106,11 @@ def run_analysis_2d(config_path="configs/config_2d.json"):
         fig_status = px.bar(
             df_status,
             x="status",
-            y="success_rate",
+            y="capture_rate",
             color="pokeball",
             barmode="group",
-            title=f"{pkmn.capitalize()}: Capture Success vs. Status\n(HP fixed at {fixed_hp*100:.0f}%, Level fixed at {fixed_level})",
-            labels={"status": "Status", "success_rate": "Success Rate"}
+            title=f"{pkmn.capitalize()}: Capture Rate vs. Status\n(HP fixed at {fixed_hp*100:.0f}%, Level fixed at {fixed_level})",
+            labels={"status": "Status", "capture_rate": "Capture Rate"}
         )
         fig_status.show()
 

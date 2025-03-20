@@ -4,7 +4,7 @@
       "pokeballs": ["pokeball", "ultraball", "fastball", "heavyball"],
       "statuses": ["NONE", "POISON", "BURN", "PARALYSIS", "SLEEP", "FREEZE"],
       "hp_percentages": [0.25, 0.5, 0.75, 1.0],
-      "levels": [0, 20, 50, 100],
+      "levels": [0, 50, 100],
       "num_experiments": 50,
       "noise": 0.0,
       "fixed_status": "NONE",

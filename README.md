@@ -27,6 +27,6 @@ para instalar las dependencias necesarias en el ambiente virtual
 ## Ejecución
 
 ```
-pipenv run python main.py [config_file]
+pipenv run python analysis_ejercicio.py configs/config_ejercicio.json
 ```
 

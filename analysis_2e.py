@@ -33,7 +33,6 @@ def run_analysis_2e(config_path="configs/config_2e.json"):
             for hp_perc in hp_percentages:
                 for lvl in levels:
                     for ball in pokeballs:
-                        success_count = 0
                         for _ in range(num_experiments):
                             poke = factory.create(
                                 pkmn_name,
@@ -41,17 +40,14 @@ def run_analysis_2e(config_path="configs/config_2e.json"):
                                 status_effect,
                                 hp_perc
                             )
-                            attempt_success, _ = attempt_catch(poke, ball, noise)
-                            if attempt_success:
-                                success_count += 1
-                        success_rate = success_count / num_experiments
+                            _, capture_rate = attempt_catch(poke, ball, noise)
                         results.append({
                             "pokemon": pkmn_name,
                             "status": status_str,
                             "hp_perc": hp_perc,
                             "level": lvl,
                             "pokeball": ball,
-                            "success_rate": success_rate
+                            "capture_rate": capture_rate
                         })
 
     # Pasar resultados a DataFrame
@@ -65,9 +61,9 @@ def run_analysis_2e(config_path="configs/config_2e.json"):
         for lvl in levels:
             df_subset = df[(df["pokemon"] == pkmn) & (df["level"] == lvl)]
             if not df_subset.empty:
-                max_rate = df_subset["success_rate"].max()
-                best = df_subset[df_subset["success_rate"] == max_rate]
-                print(f"\n{pkmn.capitalize()} at Level {lvl} - Best success rate: {max_rate:.4f}")
+                max_rate = df_subset["capture_rate"].max()
+                best = df_subset[df_subset["capture_rate"] == max_rate]
+                print(f"\n{pkmn.capitalize()} at Level {lvl} - Best capture rate: {max_rate:.4f}")
                 print(best.to_string(index=False))
 
     # Producir gráficos para cada pokemon en cada nivel que aparece en la configuración
@@ -82,11 +78,11 @@ def run_analysis_2e(config_path="configs/config_2e.json"):
                 fig_hp = px.bar(
                     df_hp,
                     x="hp_perc",
-                    y="success_rate",
+                    y="capture_rate",
                     color="pokeball",
                     barmode="group",
-                    title=f"{pkmn.capitalize()} (Level = {lvl}): Capture Success vs. HP Percentage\n(Status fixed at {fixed_status.name})",
-                    labels={"hp_perc": "HP Percentage", "success_rate": "Success Rate"}
+                    title=f"{pkmn.capitalize()} (Level = {lvl}): Capture Rate vs. HP Percentage\n(Status fixed at {fixed_status.name})",
+                    labels={"hp_perc": "HP Percentage", "capture_rate": "Capture Rate"}
                 )
                 fig_hp.show()
 
@@ -98,11 +94,11 @@ def run_analysis_2e(config_path="configs/config_2e.json"):
                 fig_status = px.bar(
                     df_status,
                     x="status",
-                    y="success_rate",
+                    y="capture_rate",
                     color="pokeball",
                     barmode="group",
-                    title=f"{pkmn.capitalize()} (Level = {lvl}): Capture Success vs. Status\n(HP fixed at {fixed_hp*100:.0f}%)",
-                    labels={"status": "Status", "success_rate": "Success Rate"}
+                    title=f"{pkmn.capitalize()} (Level = {lvl}): Capture Rate vs. Status\n(HP fixed at {fixed_hp*100:.0f}%)",
+                    labels={"status": "Status", "capture_rate": "Capture Rate"}
                 )
                 fig_status.show()
 
